@@ -1,6 +1,6 @@
 import { Button, Menu, Dropdown, Space } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
-import { useEditor } from "slate-react";
+import { useSlateStatic } from "slate-react";
 
 import {
   getIconForButton,
@@ -13,7 +13,7 @@ const PARAGRAPH_STYLES = ["h1", "h2", "h3", "h4", "paragraph", "multiple"];
 const CHARACTER_STYLES = ["bold", "italic", "underline", "code", "image", "link"];
 
 export default function Toolbar({ selection }) {
-  const editor = useEditor();
+  const editor = useSlateStatic();
   const buttonType = (style) => (getActiveStyles(editor).has(style) ? 'primary' : 'default' );
   const menu = (
     <Menu>

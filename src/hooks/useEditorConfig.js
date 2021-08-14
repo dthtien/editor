@@ -1,4 +1,8 @@
+import { useCallback }  from 'react';
 import { DefaultElement } from "slate-react";
+import isHotkey from 'is-hotkey';
+
+import { toggleStyle } from '../utils'
 
 const renderElement = (props) => {
   const { element, children, attributes } = props;
@@ -41,10 +45,37 @@ function renderLeaf({ attributes, children, leaf }) {
   return <span {...attributes}>{el}</span>;
 }
 
+const KeyBindings = {
+  onKeyDown: (editor, event) => {
+    if (isHotkey("mod+b", event)) {
+      toggleStyle(editor, "bold");
+      return;
+    }
+    if (isHotkey("mod+i", event)) {
+      toggleStyle(editor, "italic");
+      return;
+    }
+    if (isHotkey("mod+c", event)) {
+      toggleStyle(editor, "code");
+      return;
+    }
+    if (isHotkey("mod+u", event)) {
+      toggleStyle(editor, "underline");
+      return;
+    }
+  },
+};
+
 export default function useEditorConfig(editor) {
+  const onKeyDown = useCallback(
+    (event) => KeyBindings.onKeyDown(editor, event),
+    [editor]
+  )
+
   return {
     renderElement,
-    renderLeaf
+    renderLeaf,
+    onKeyDown
   };
 }
 
