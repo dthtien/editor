@@ -9,15 +9,18 @@ import {
   getActiveStyles,
   toggleStyle,
   toggleBlockType,
-  getTextBlockStyle
+  getTextBlockStyle,
+  isLinkNodeAtSelection,
+  toggleLinkAtSelection
 } from '../utils'
 
 const PARAGRAPH_STYLES = ["h1", "h2", "h3", "h4", "paragraph", "multiple"];
-const CHARACTER_STYLES = ["bold", "italic", "underline", "code", "image", "link"];
+const CHARACTER_STYLES = ["bold", "italic", "underline", "code", "image"];
 
 export default function Toolbar({ selection }) {
   const editor = useSlateStatic();
   const buttonType = (style) => (getActiveStyles(editor).has(style) ? 'primary' : 'default' );
+  const linkStyle = () => (isLinkNodeAtSelection(editor, editor.selection) ? 'primary' : 'default' );
   const onBlockTypeChange = useCallback(
     (targetType) => {
       if (targetType === 'multiple') return;
@@ -61,6 +64,12 @@ export default function Toolbar({ selection }) {
           />
         ))
       }
+      <Button
+        key='link'
+        icon={getIconForButton('link')}
+        type={linkStyle()}
+        onMouseDown={() => toggleLinkAtSelection(editor)}
+      />
     </Space>
   );
 }

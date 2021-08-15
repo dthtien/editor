@@ -2,6 +2,7 @@ import { useCallback }  from 'react';
 import { DefaultElement } from "slate-react";
 import isHotkey from 'is-hotkey';
 
+import Link from '../components/Link';
 import { toggleStyle } from '../utils'
 
 const renderElement = (props) => {
@@ -17,6 +18,8 @@ const renderElement = (props) => {
       return <h3 {...attributes}>{children}</h3>;
     case "h4":
       return <h4 {...attributes}>{children}</h4>;
+    case "link":
+      return <Link url={element.url} {...props}/>
     default:
       // For the default case, we delegate to Slate's default rendering.
       return <DefaultElement {...props} />;
@@ -71,6 +74,8 @@ export default function useEditorConfig(editor) {
     (event) => KeyBindings.onKeyDown(editor, event),
     [editor]
   )
+
+  editor.isInline = (element) => ["link"].includes(element.type);
 
   return {
     renderElement,

@@ -5,7 +5,9 @@ import {
   getActiveStyles,
   toggleStyle,
   toggleBlockType,
-  getTextBlockStyle
+  getTextBlockStyle,
+  isLinkNodeAtSelection,
+  toggleLinkAtSelection
 } from './EditorHelpers.js';
 
 export {
@@ -15,5 +17,7 @@ export {
   getActiveStyles,
   toggleStyle,
   toggleBlockType,
-  getTextBlockStyle
+  getTextBlockStyle,
+  isLinkNodeAtSelection,
+  toggleLinkAtSelection
 };

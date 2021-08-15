@@ -6,7 +6,7 @@ import {
   FileImageOutlined,
   LinkOutlined
 } from '@ant-design/icons';
-import { Editor, Transforms, Range } from "slate";
+import { Editor, Transforms, Range, Element } from "slate";
 
 const getLabelForBlockStyle = (style) => {
   switch (style) {
@@ -94,6 +94,46 @@ function toggleBlockType(editor, blockType) {
   );
 }
 
+function isLinkNodeAtSelection(editor, selection) {
+  if (selection == null) {
+    return false;
+  }
+
+  return (
+    Editor.above(editor, {
+      at: selection,
+      match: (n) => n.type === "link",
+    }) != null
+  );
+}
+
+function toggleLinkAtSelection(editor) {
+  if (!isLinkNodeAtSelection(editor, editor.selection)) {
+    const isSelectionCollapsed =
+      Range.isCollapsed(editor.selection);
+    if (isSelectionCollapsed) {
+      Transforms.insertNodes(
+        editor,
+        {
+          type: "link",
+          url: '#',
+          children: [{ text: 'link' }],
+        },
+        { at: editor.selection }
+      );
+    } else {
+      Transforms.wrapNodes(
+        editor,
+        { type: "link", url: '#', children: [{ text: '' }] },
+        { split: true, at: editor.selection }
+      );
+    }
+  } else {
+    Transforms.unwrapNodes(editor, {
+      match: (n) => Element.isElement(n) && n.type === "link",
+    });
+  }
+}
 
 export {
   getLabelForBlockStyle,
@@ -101,5 +141,7 @@ export {
   getActiveStyles,
   toggleStyle,
   getTextBlockStyle,
-  toggleBlockType
+  toggleBlockType,
+  isLinkNodeAtSelection,
+  toggleLinkAtSelection
 } ;
