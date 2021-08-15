@@ -1,4 +1,5 @@
 import { Button, Menu, Dropdown, Space } from 'antd';
+import { useCallback } from 'react';
 import { DownOutlined } from '@ant-design/icons';
 import { useSlateStatic } from "slate-react";
 
@@ -6,7 +7,9 @@ import {
   getIconForButton,
   getLabelForBlockStyle,
   getActiveStyles,
-  toggleStyle
+  toggleStyle,
+  toggleBlockType,
+  getTextBlockStyle
 } from '../utils'
 
 const PARAGRAPH_STYLES = ["h1", "h2", "h3", "h4", "paragraph", "multiple"];
@@ -15,11 +18,21 @@ const CHARACTER_STYLES = ["bold", "italic", "underline", "code", "image", "link"
 export default function Toolbar({ selection }) {
   const editor = useSlateStatic();
   const buttonType = (style) => (getActiveStyles(editor).has(style) ? 'primary' : 'default' );
+  const onBlockTypeChange = useCallback(
+    (targetType) => {
+      if (targetType === 'multiple') return;
+
+      toggleBlockType(editor, targetType);
+    },
+    [editor]
+  );
+  const blockType = getTextBlockStyle(editor);
+
   const menu = (
     <Menu>
       {
         PARAGRAPH_STYLES.map((blockType) => (
-          <Menu.Item eventKey={blockType} key={blockType}>
+          <Menu.Item key={blockType} onMouseDown={() => onBlockTypeChange(blockType)} >
             {getLabelForBlockStyle(blockType)}
           </Menu.Item>
         ))
@@ -29,9 +42,9 @@ export default function Toolbar({ selection }) {
 
   return (
     <Space wrap>
-      <Dropdown overlay={menu}>
+      <Dropdown overlay={menu} disabled={blockType == null}>
         <Button>
-          {getLabelForBlockStyle("paragraph")}
+          {getLabelForBlockStyle(blockType ?? "paragraph")}
           <DownOutlined />
         </Button>
       </Dropdown>

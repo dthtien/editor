@@ -3,7 +3,9 @@ import {
   getLabelForBlockStyle,
   getIconForButton,
   getActiveStyles,
-  toggleStyle
+  toggleStyle,
+  toggleBlockType,
+  getTextBlockStyle
 } from './EditorHelpers.js';
 
 export {
@@ -11,5 +13,7 @@ export {
   getLabelForBlockStyle,
   getIconForButton,
   getActiveStyles,
-  toggleStyle
+  toggleStyle,
+  toggleBlockType,
+  getTextBlockStyle
 };
