@@ -1,14 +1,17 @@
 import { Editable, Slate, withReact } from "slate-react";
 import { createEditor } from "slate";
-import { useMemo, useCallback } from "react";
+import { useMemo, useCallback, useRef } from "react";
+
 import { useEditorConfig, useSelection } from '../hooks'
+import { isLinkNodeAtSelection } from '../utils'
 
 import Toolbar from './Toolbar'
+import LinkEditor from './LinkEditor'
 
 export default function Editor({ document, onChange }) {
   const editor = useMemo(() => withReact(createEditor()), []);
   const { renderElement, renderLeaf, onKeyDown } = useEditorConfig(editor);
-  const [selection, setSelection] = useSelection(editor);
+  const [previousSelection, selection, setSelection] = useSelection(editor);
   const onChangeHandler = useCallback(
     (document) => {
       onChange(document);
@@ -16,15 +19,53 @@ export default function Editor({ document, onChange }) {
     },
     [editor.selection, onChange, setSelection]
   );
+  const editorRef = useRef(null);
+
+  const parseEditorOffsets = () => {
+    if (editorRef.current != null) {
+      return (
+        {
+          x: editorRef.current.getBoundingClientRect().x,
+          y: editorRef.current.getBoundingClientRect().y,
+        }
+      )
+    }
+
+    return null;
+  }
+
+  let selectionForLink = null;
+  if (isLinkNodeAtSelection(editor, selection)) {
+    selectionForLink = selection;
+  } else if (selection == null && isLinkNodeAtSelection(editor, previousSelection)) {
+    selectionForLink = previousSelection;
+  }
+
+
+  const CustomizedLinkEditor = () => {
+    if (isLinkNodeAtSelection(editor, selection)) {
+      return(
+        <LinkEditor
+          editorOffsets={parseEditorOffsets()}
+          selectionForLink={selectionForLink}
+        />
+      )
+    }
+
+    return null
+  }
 
   return (
     <Slate editor={editor} value={document} onChange={onChangeHandler}>
       <Toolbar selection={selection} />
-      <Editable
-        renderElement = {renderElement}
-        renderLeaf = {renderLeaf}
-        onKeyDown={onKeyDown}
-      />
+      <div className="editor" ref={editorRef}>
+        <CustomizedLinkEditor />
+        <Editable
+          renderElement = {renderElement}
+          renderLeaf = {renderLeaf}
+          onKeyDown={onKeyDown}
+        />
+      </div>
     </Slate>
   );
 }

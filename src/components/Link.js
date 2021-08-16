@@ -1,8 +1,7 @@
-import { Button } from 'antd';
 export default function Link({ element, attributes, children }) {
   return (
-    <Button href={element.url} {...attributes} type="link">
+    <a href={element.url} {...attributes}>
       {children}
-    </Button>
+    </a>
   );
 }

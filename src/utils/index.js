@@ -9,6 +9,7 @@ import {
   isLinkNodeAtSelection,
   toggleLinkAtSelection
 } from './EditorHelpers.js';
+import isUrl from './isUrl'
 
 export {
   ExampleDocument,
@@ -19,5 +20,6 @@ export {
   toggleBlockType,
   getTextBlockStyle,
   isLinkNodeAtSelection,
-  toggleLinkAtSelection
+  toggleLinkAtSelection,
+  isUrl
 };
