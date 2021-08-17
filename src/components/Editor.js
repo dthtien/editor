@@ -9,17 +9,18 @@ import Toolbar from './Toolbar'
 import LinkEditor from './LinkEditor'
 
 export default function Editor({ document, onChange }) {
+  const editorRef = useRef(null);
   const editor = useMemo(() => withReact(createEditor()), []);
   const { renderElement, renderLeaf, onKeyDown } = useEditorConfig(editor);
   const [previousSelection, selection, setSelection] = useSelection(editor);
+
   const onChangeHandler = useCallback(
-    (document) => {
-      onChange(document);
+    (doc) => {
+      onChange(doc);
       setSelection(editor.selection);
     },
     [editor.selection, onChange, setSelection]
   );
-  const editorRef = useRef(null);
 
   const parseEditorOffsets = () => {
     if (editorRef.current != null) {
@@ -37,13 +38,16 @@ export default function Editor({ document, onChange }) {
   let selectionForLink = null;
   if (isLinkNodeAtSelection(editor, selection)) {
     selectionForLink = selection;
-  } else if (selection == null && isLinkNodeAtSelection(editor, previousSelection)) {
+  } else if (
+    selection == null &&
+    isLinkNodeAtSelection(editor, previousSelection)
+  ) {
     selectionForLink = previousSelection;
   }
 
 
   const CustomizedLinkEditor = () => {
-    if (isLinkNodeAtSelection(editor, selection)) {
+    if (selectionForLink != null) {
       return(
         <LinkEditor
           editorOffsets={parseEditorOffsets()}

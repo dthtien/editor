@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import "antd/dist/antd.css";
 import { Menu } from 'antd';
@@ -12,10 +11,7 @@ const { SubMenu } = Menu;
 function App() {
   const [current, setCurrent] = useState('mail');
   const [document, updateDocument] = useState(ExampleDocument);
-  const handleClick = (e) => {
-    console.log('click', e);
-    setCurrent(e.key);
-  }
+  const handleClick = (e) => setCurrent(e.key);
 
   return (
     <>

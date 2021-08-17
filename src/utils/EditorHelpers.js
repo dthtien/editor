@@ -85,7 +85,6 @@ function getTextBlockStyle(editor) {
 
 function toggleBlockType(editor, blockType) {
   const currentBlockType = getTextBlockStyle(editor);
-  console.log(currentBlockType)
   const changeTo = currentBlockType == blockType ? 'paragraph' : blockType;
   Transforms.setNodes(
     editor,

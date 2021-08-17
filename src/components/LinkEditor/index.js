@@ -12,8 +12,8 @@ const LinkEditor = ({ editorOffsets, selectionForLink }) => {
     at: selectionForLink,
     match: (n) => n.type === "link",
   });
-  const [linkURL, setLinkURL] = useState(node.url);
 
+  const [linkURL, setLinkURL] = useState(node.url);
   useEffect(() => { setLinkURL(node.url); }, [node]);
 
   const onLinkURLChange = useCallback(
@@ -24,7 +24,7 @@ const LinkEditor = ({ editorOffsets, selectionForLink }) => {
   const onApply = useCallback(
     (event) => {
       Transforms.setNodes(editor, { url: linkURL }, { at: path });
-    }, [editor, linkURL. path]
+    }, [editor, linkURL, path]
   )
 
   useEffect(() => {
@@ -39,8 +39,8 @@ const LinkEditor = ({ editorOffsets, selectionForLink }) => {
     } = linkDOMNode.getBoundingClientRect();
 
     linkEditorEl.style.display = 'block';
-    linkEditorEl.style.top = `${nodeY + nodeHeight - editorOffsets.y}px`;
-    linkEditorEl.style.left = `${nodeX - editorOffsets.x}px`;
+    linkEditorEl.style.top = `${nodeY + nodeHeight}px`;
+    linkEditorEl.style.left = `${nodeX}px`;
   }, [editor, editorOffsets.x, editorOffsets.y, node]);
 
   if (editorOffsets == null) return null;
@@ -48,8 +48,18 @@ const LinkEditor = ({ editorOffsets, selectionForLink }) => {
   return (
     <div ref={linkEditorRef} className="link-editor">
       <div className='link-editor-body'>
-        <Input defaultValue={linkURL} onChange={onLinkURLChange} />
-        <Button type="primary" onClick={onApply} disabled={!isUrl(linkURL)}>
+        <Input
+          size='small'
+          defaultValue={linkURL}
+          onChange={onLinkURLChange}
+        />
+        <Button
+          className="link-editor-btn"
+          size="small"
+          type="primary"
+          onClick={onApply}
+          disabled={!isUrl(linkURL)}
+        >
           Apply
         </Button>
       </div>

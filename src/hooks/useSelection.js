@@ -6,9 +6,8 @@ export default function useSelection(editor) {
   const previousSelection = useRef(null);
   const setSelectionOptimized = useCallback(
     (newSelection) => {
-      if (areEqual(selection, newSelection)) {
-        return;
-      }
+      if (areEqual(selection, newSelection)) return;
+
       previousSelection.current = selection;
       setSelection(newSelection);
     },
