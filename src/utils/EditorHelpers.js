@@ -6,7 +6,8 @@ import {
   FileImageOutlined,
   LinkOutlined
 } from '@ant-design/icons';
-import { Editor, Transforms, Range, Element } from "slate";
+import { Editor, Transforms, Range, Element, Text, Point } from "slate";
+import isUrl from './isUrl';
 
 const getLabelForBlockStyle = (style) => {
   switch (style) {
@@ -134,6 +135,58 @@ function toggleLinkAtSelection(editor) {
   }
 }
 
+const identifyLinksInTextIfAny = (editor) => {
+  if (editor.selection == null || !Range.isCollapsed(editor.selection)) return;
+
+  const [node, _] = Editor.parent(editor, editor.selection);
+
+  if (node.type === 'link') return;
+
+  const [currentNode, currentNodePath] = Editor.node(editor, editor.selection)
+  if (!Text.isText(currentNode)) return;
+
+  let [start] = Range.edges(editor.selection);
+  const cursorPoint = start;
+
+  const startPointOfLastCharacter = Editor.before(
+    editor,
+    editor.selection,
+    { unit: 'character' }
+  );
+
+  const lastCharacter = Editor.string(
+  editor,
+    Editor.range(editor, startPointOfLastCharacter, cursorPoint)
+  );
+
+  if (lastCharacter !== ' ') return;
+
+  let end = startPointOfLastCharacter;
+  start = Editor.before(editor, end, { unit: 'character' });
+  const startOfTextNode = Editor.point(editor, currentNodePath, { edge: 'start' });
+
+  while(
+    Editor.string(editor, Editor.range(editor, start, end)) !== ' ' &&
+    !Point.isBefore(start, startOfTextNode)
+  ) {
+    end = start;
+    start = Editor.before(editor, end, { unit: 'character' })
+  }
+
+  const lastWordRange = Editor.range(editor, end, startPointOfLastCharacter);
+  const lastWord = Editor.string(editor, lastWordRange);
+
+  if (isUrl(lastWord)) {
+    Promise.resolve().then(() => {
+      Transforms.wrapNodes(
+        editor,
+        { type: "link", url: lastWord, children: [{ text: lastWord }] },
+        { split: true, at: lastWordRange }
+      )
+    });
+  }
+}
+
 export {
   getLabelForBlockStyle,
   getIconForButton,
@@ -142,5 +195,6 @@ export {
   getTextBlockStyle,
   toggleBlockType,
   isLinkNodeAtSelection,
-  toggleLinkAtSelection
-} ;
+  toggleLinkAtSelection,
+  identifyLinksInTextIfAny
+};

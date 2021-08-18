@@ -7,7 +7,8 @@ import {
   toggleBlockType,
   getTextBlockStyle,
   isLinkNodeAtSelection,
-  toggleLinkAtSelection
+  toggleLinkAtSelection,
+  identifyLinksInTextIfAny
 } from './EditorHelpers.js';
 import isUrl from './isUrl'
 
@@ -21,5 +22,6 @@ export {
   getTextBlockStyle,
   isLinkNodeAtSelection,
   toggleLinkAtSelection,
-  isUrl
+  isUrl,
+  identifyLinksInTextIfAny
 };

@@ -3,7 +3,7 @@ import { createEditor } from "slate";
 import { useMemo, useCallback, useRef } from "react";
 
 import { useEditorConfig, useSelection } from '../hooks'
-import { isLinkNodeAtSelection } from '../utils'
+import { isLinkNodeAtSelection, identifyLinksInTextIfAny } from '../utils'
 
 import Toolbar from './Toolbar'
 import LinkEditor from './LinkEditor'
@@ -18,8 +18,9 @@ export default function Editor({ document, onChange }) {
     (doc) => {
       onChange(doc);
       setSelection(editor.selection);
+      identifyLinksInTextIfAny(editor);
     },
-    [editor.selection, onChange, setSelection]
+    [editor, onChange, setSelection]
   );
 
   const parseEditorOffsets = () => {
