@@ -13,11 +13,12 @@ import {
   isLinkNodeAtSelection,
   toggleLinkAtSelection
 } from '../utils'
+import { useImageUploadHandler } from '../hooks'
 
 const PARAGRAPH_STYLES = ["h1", "h2", "h3", "h4", "paragraph", "multiple"];
 const CHARACTER_STYLES = ["bold", "italic", "underline", "code", "image"];
 
-export default function Toolbar({ selection }) {
+export default function Toolbar({ selection, previousSelection }) {
   const editor = useSlateStatic();
   const buttonType = (style) => (getActiveStyles(editor).has(style) ? 'primary' : 'default' );
   const linkStyle = () => (isLinkNodeAtSelection(editor, editor.selection) ? 'primary' : 'default' );

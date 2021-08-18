@@ -19,6 +19,12 @@ const ExampleDocument = [
     ],
   },
   {
+    type: 'image',
+    url: 'https://images.unsplash.com/photo-1544654262-e295983be0f4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1yZWxhdGVkfDF8fHxlbnwwfHx8fA%3D%3D&auto=format&fit=crop&w=500&q=60',
+    caption: "Puppy",
+    children: [{ text: '' }]
+  },
+  {
     type: "h1",
     children: [{ text: "Heading 1" }],
   },
@@ -26,6 +32,7 @@ const ExampleDocument = [
     type: "h2",
     children: [{ text: "Heading 2" }],
   },
+
 ];
 
 export default ExampleDocument;

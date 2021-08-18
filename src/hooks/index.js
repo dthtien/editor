@@ -1,4 +1,5 @@
 import useEditorConfig from './useEditorConfig';
 import useSelection from './useSelection';
+import useImageUploadHandler from './useImageUploadHandler';
 
-export { useEditorConfig, useSelection };
+export { useEditorConfig, useSelection, useImageUploadHandler };

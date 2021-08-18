@@ -62,7 +62,7 @@ export default function Editor({ document, onChange }) {
 
   return (
     <Slate editor={editor} value={document} onChange={onChangeHandler}>
-      <Toolbar selection={selection} />
+      <Toolbar selection={selection} previousSelection={previousSelection} />
       <div className="editor" ref={editorRef}>
         <CustomizedLinkEditor />
         <Editable

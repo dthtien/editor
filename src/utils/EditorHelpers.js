@@ -81,7 +81,7 @@ function getTextBlockStyle(editor) {
     startTopLevelBlockIndex++;
   }
 
-  return blockType;
+  return blockType === 'image' ? 'paragraph' : blockType;
 }
 
 function toggleBlockType(editor, blockType) {
